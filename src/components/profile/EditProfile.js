@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
+import firebase from "../../config/firebase";
 
 function EditProfile({ currentUser }) {
   const [displayName, setDisplayName] = useState(currentUser.displayName);

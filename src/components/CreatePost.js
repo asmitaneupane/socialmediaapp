@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import firebase from 'firebase/compat/app'
+import firebase from "../config/firebase"
 
 export default function CreatePost({ currentUser }) {
   const [title, setTitle] = useState("");

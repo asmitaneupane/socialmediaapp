@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import firebase from "firebase/compat/app";
-import "firebase/firestore";
+import firebase from "../config/firebase";
+import LikeButton from "./LikeButton";
+import CommentForm from "./CommentForm";
 
 function PostList({ currentUser }) {
   const [posts, setPosts] = useState([]);
@@ -15,33 +16,6 @@ function PostList({ currentUser }) {
       setPosts(newPosts);
     });
   }, []);
-
-  //   this is to check whether user already like the post or not,
-  //   if yes delete their likes, if not like the post.
-  const handleLikeClick = async (postId) => {
-    const postRef = firebase.firestore().collection("posts").doc(postId);
-    const likedBy = postRef.collection("likes").doc(currentUser.uid);
-    const snapshot = await likedBy.get();
-    if (snapshot.exists) {
-      await likedBy.delete();
-    } else {
-      await likedBy.set({
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-    }
-  };
-
-  // creates a new document as a comment to the post with comment text, author id, name, and timestamp.
-  const handleCommentSubmit = async (event, postId, commentText) => {
-    event.preventDefault();
-    const postRef = firebase.firestore().collection("posts").doc(postId);
-    await postRef.collection("comments").add({
-      text: commentText,
-      authorId: currentUser.uid,
-      authorName: currentUser.displayName,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-  };
 
   return (
     <div>
@@ -58,31 +32,16 @@ function PostList({ currentUser }) {
             Posted by {post.authorName} on{" "}
             {new Date(post.timestamp.toDate()).toLocaleString()}
           </p>
-          <button onClick={() => handleLikeClick(post.id)}>
-            {post.likes && post.likes[currentUser.uid] ? "Unlike" : "Like"}
-          </button>
-          {post.comments && (
-            <div>
-              {Object.keys(post.comments).map((commentId) => (
-                <p key={commentId}>
-                  <strong>{post.comments[commentId].authorName}</strong>:{" "}
-                  {post.comments[commentId].text}
-                </p>
-              ))}
-            </div>
-          )}
-          <form
-            onSubmit={(event) =>
-              handleCommentSubmit(
-                event,
-                post.id,
-                event.target.commentText.value
-              )
-            }
-          >
-            <input type="text" name="commentText" placeholder="Add a comment" />
-            <button type="submit">Post</button>
-          </form>
+          <LikeButton
+            post={post}
+            currentUser={currentUser}
+            firebase={firebase}
+          />
+          <CommentForm
+            post={post}
+            currentUser={currentUser}
+            firebase={firebase}
+          />
         </div>
       ))}
     </div>

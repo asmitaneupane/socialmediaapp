@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { fireStorage, storage } from "../../config/firebase";
-import "firebase/auth";
-import "firebase/storage";
-import "firebase/firestore";
+import firebase from "../../config/firebase";
 
 function Profile({ currentUser }) {
   const [displayName, setDisplayName] = useState(currentUser.displayName);
@@ -10,7 +7,7 @@ function Profile({ currentUser }) {
   const [profileImageUrl, setProfileImageUrl] = useState("");
 
   const handleSaveProfile = async () => {
-    const db = fireStorage.firestore();
+    const db = firebase.firestore();
     const userRef = db.collection("users").doc(currentUser.uid);
     await userRef.update({
       displayName,
@@ -25,7 +22,7 @@ function Profile({ currentUser }) {
 
   const handleFileInputChange = async (event) => {
     const file = event.target.files[0];
-    const storageRef = storage().ref();
+    const storageRef = firebase.storage().ref();
     const fileRef = storageRef.child(
       `profile-images/${currentUser.uid}/${file.name}`
     );
