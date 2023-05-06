@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import firebase from 'firebase/compat/app'
 
 export default function CreatePost({ currentUser }) {
   const [title, setTitle] = useState("");
@@ -14,6 +15,29 @@ export default function CreatePost({ currentUser }) {
   const handlePostSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+
+    // Upload media file to Firebase Storage (if present)
+    if (mediaFile) {
+      const storageRef = firebase
+        .storage()
+        .ref()
+        .child(`posts/${mediaFile.name}`);
+      await storageRef.put(mediaFile);
+      const url = await storageRef.getDownloadURL();
+      setMediaUrl(url);
+    }
+
+    // Add post to Firestore
+    const postRef = firebase.firestore().collection("posts");
+    const newPost = {
+      title,
+      content,
+      mediaUrl,
+      authorId: currentUser.uid,
+      authorName: currentUser.displayName,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    await postRef.add(newPost);
 
     // Reset form
     setTitle("");

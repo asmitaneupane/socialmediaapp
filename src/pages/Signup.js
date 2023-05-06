@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -8,7 +7,7 @@ export default function Signup() {
 
   const handleSignup = async () => {
     try {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      await createUserWithEmailAndPassword(email, password);
     } catch (error) {
       alert(error.message);
     }
@@ -16,7 +15,7 @@ export default function Signup() {
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Sign Up</h2>
       <form>
         <div>
           <label>Email:</label>
