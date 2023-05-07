@@ -20,16 +20,14 @@ const firebaseConfig = {
   messagingSenderId: "357477250609",
   appId: "1:357477250609:web:904749e66016eba3124710",
   measurementId: "G-BP5Z7EK3KY",
+  databaseURL: "https://social-media-app-1f6e1-default-rtdb.firebaseio.com",
 };
 
 // Initialize Firebase
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
-// export const fireStorage = new Firestore(app);
-// export const storage = getStorage(app);
-// export const pathReference = ref();
 
 export default firebase;
