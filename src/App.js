@@ -7,8 +7,9 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import CreatePost from "./components/CreatePost";
 
+// import firebase dependencies
 import { getDatabase, ref, set } from "firebase/database";
-import { app } from "./config/firebase";
+import { app, auth, provider } from "./config/firebase";
 
 const db = getDatabase(app);
 
@@ -26,8 +27,8 @@ export default function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup onClick={putData} />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup auth={auth} onClick={putData} />} />
+        <Route path="/login" element={<Login auth={auth} />} />
         <Route path="/createpost" element={<CreatePost />} />
       </Routes>
     </Router>

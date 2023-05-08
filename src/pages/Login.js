@@ -13,13 +13,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-export default function Login() {
+export default function Login({auth}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       alert(error.message);
     }
@@ -42,6 +42,8 @@ export default function Login() {
           <TextField
             margin="normal"
             required
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
             fullWidth
             id="email"
             label="Email Address"
@@ -52,6 +54,8 @@ export default function Login() {
           <TextField
             margin="normal"
             required
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
             fullWidth
             name="password"
             label="Password"
